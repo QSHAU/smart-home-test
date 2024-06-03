@@ -4,7 +4,16 @@
 
 </script>
 
+<div class="page">
+  <Store >
+    <Interface />
+  </Store>
+</div>
 
-<Store >
-  <Interface />
-</Store>
+<style lang="scss">
+  .page {
+    background-color: #0A182E;
+    max-width: 375px;
+    width: 100%;
+  }
+</style>
