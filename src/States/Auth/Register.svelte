@@ -1,47 +1,136 @@
 <script>
-  import { getContext } from "svelte";
+    import { getContext } from "svelte";
+    import api from "../../Data/api";
 
-    export let option;
-
-    const {isAuth} = getContext('store');
+    const {authStatus} = getContext('store');
     
     let username;
     let email;
     let password;
-    let userData = {};
 
     const formSubmit = async (e) => {
         e.preventDefault();
 
-        userData = {
+        const response = await api.post('user/create', {
             username,
             email,
             password,
-        }
+        })
+        .then(function(response) {
+            alert(response.data.message);
+            return response.data;
+        })
+        .catch(function(response) {
+            console.error('Error', response.message)
+        })
 
-        const response = await fetch(`${option?.apiURL}user/create`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData),
-        });
-            
-        const json = await response.json();
-        
-        if (json.success) {
-            alert(json.message);
-            $isAuth = true;
-            return json.data;
-        } else {
-            console.error('Error', json.message)
-        }
+        return response
+    }
+
+    const changeAuth = (status) => {
+        $authStatus = status;
     }
 </script>
 
-<form on:submit={(e) => formSubmit(e)}>
-    <input type="text" bind:value={username} placeholder="login">
-    <input type="email" bind:value={email} placeholder="email">
-    <input type="password" bind:value={password} placeholder="password">
-    <button type="submit">submit</button>
-</form>
+<div class="register">
+    <form class="register-form" on:submit={(e) => formSubmit(e)}>
+        <label class="register-label">
+            Login
+            <input type="text" bind:value={username} placeholder="login">
+        </label>
+        <label class="register-label">
+            Email
+            <input type="email" bind:value={email} placeholder="email">
+        </label>
+        <label class="register-label">
+            Password
+            <input type="password" bind:value={password} placeholder="password">
+        </label>
+        <button type="submit">Create account</button>
+    </form>
+    <button class="log-btn" type="button" on:click={() => changeAuth(false)}>Sign In</button>
+</div>
+
+<style lang="scss">
+    .register {
+        width: 100%;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+        position: absolute;
+
+        &-form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            grid-gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        &-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            line-height: 14px;
+            color: #fff;
+        }
+
+        input {
+            display: block;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 1;
+            max-width: 220px;
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+            border-radius: 10px;
+            color: #fff;
+            background-color: transparent;
+            outline: none;
+
+            &::placeholder {
+                color: #ccc;
+            }
+        }
+
+        button[type="submit"] {
+            font-size: 17px;
+            line-height: 24px;
+            font-weight: 500;
+            padding: 20px;
+            border-radius: 16px;
+            max-width: 200px;
+            align-self: center;
+            border: none;
+            background-color: #FFB267;
+            margin-top: 25px;
+            cursor: pointer;
+            transition: box-shadow .3s;
+
+            &:hover {
+                box-shadow: 0 0 8px rgba(255, 255, 255, .6);
+            }
+        }
+
+        & .log-btn {
+            display: block;
+            font-size: 17px;
+            line-height: 24px;
+            font-weight: 500;
+            padding: 20px;
+            border-radius: 16px;
+            max-width: 200px;
+            align-self: center;
+            border: none;
+            background-color: #FFB267;
+            margin: 25px auto 0;
+            cursor: pointer;
+            transition: box-shadow .3s;
+
+            &:hover {
+                box-shadow: 0 0 8px rgba(255, 255, 255, .6);
+            }
+        }
+    }
+</style>

@@ -1,25 +1,18 @@
 <script>
   import CreateHome from "../CreateRoom/CreateRoom.svelte";
+  import CreateDevice from "../CreateDevice/CreateDevice.svelte";
     
 </script>
 <div class="appView">
     <CreateHome />
-    <div class="device">
-        <h2 class="device-title">
-            Добавить устройство
-        </h2>
-        <button class="appView-btn__add" type="button">
-
-        </button>
-    </div>
+    <CreateDevice />
 </div>
 
 <style lang="scss">
     .appView {
-        &-btn__add {
-            width: 50px;
-            height: 50px;
-
-        }
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding-top: 15px;
     }
 </style>

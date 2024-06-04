@@ -4,10 +4,6 @@
     import AppView from "../../Components/AppView/AppView.svelte";
 
 
-    const {currentHome, user, isAuth} = getContext('store');
-
-    $currentHome = 'biba';
-
     // const logout = () => {
     //     user.set(null);
     //     localStorage.removeItem('token');
@@ -20,4 +16,8 @@
     <AppView />
 </div>
 
-<!-- <button on:click={logoutUser}></button> -->
+<style lang="scss">
+    .main {
+        padding: 15px;
+    }
+</style>

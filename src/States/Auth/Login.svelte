@@ -1,49 +1,143 @@
 <script>
     import { getContext } from "svelte";
+    import api from "../../Data/api";
+
   
-      export let option;
-  
-      const {isAuth} = getContext('store');
-      
-      let email;
-      let password;
-      let userData = {};
-  
-      const formSubmit = async (e) => {
-            e.preventDefault();
-  
-            userData = {
-                email,
-                password,
-            }
-        
-          const response = await fetch(`${option?.apiURL}auth`, {
-              method: "POST",
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(userData),
-          });
-              
-          const json = await response.json();
-          
-          if (json.success) {
-            localStorage.setItem('token', json.data.access_token);
-            localStorage.setItem('userId', json.data.id);
+    const {isAuth, authStatus} = getContext('store');
+    
+    let email;
+    let password;
+    let userData = {};
+
+    const formSubmit = async (e) => {
+        e.preventDefault();
+        userData = {
+            email,
+            password,
+        }
+        await api.post('auth', 
+        {
+            email,
+            password
+        }, 
+        { 
+            withCredentials: false 
+        })
+        .then(function (response) {
+            localStorage.setItem('token', response.data.data.access_token);
+            localStorage.setItem('refreshToken', response.data.data.refresh_token);
+            localStorage.setItem('userId', response.data.data.id);
             localStorage.setItem('houseId', '3');
             $isAuth = true;
             alert('You have success login')
-            return json.data;
-          } else {
-              console.error('Error', json.message)
-          }
-      }
-  </script>
+            return response.data.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+
+    const changeAuth = (status) => {
+        $authStatus = status;
+    }
   
-  <form on:submit={(e) => formSubmit(e)}>
-      <input type="email" bind:value={email} placeholder="email">
-      <input type="password" bind:value={password} placeholder="password">
-      <button type="submit">submit</button>
-  </form>
-  
-  
+</script>
+
+<div class="login">
+    <form class="login-form" on:submit={(e) => formSubmit(e)}>
+        <label class="login-label">
+            Email
+            <input type="email" bind:value={email} placeholder="email">
+        </label>
+        <label class="login-label">
+            Login
+            <input type="password" bind:value={password} placeholder="password">
+        </label>
+        <button type="submit">Log In</button>
+    </form>
+    <button class="reg-btn" type="button" on:click={() => changeAuth(true)}>Sign Up</button>
+</div>
+
+<style lang="scss">
+    .login {
+        width: 100%;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+        position: absolute;
+
+        &-form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            grid-gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        &-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            line-height: 14px;
+            color: #fff;
+        }
+
+        input {
+            display: block;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 1;
+            max-width: 220px;
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+            border-radius: 10px;
+            color: #fff;
+            background-color: transparent;
+            outline: none;
+
+            &::placeholder {
+                color: #ccc;
+            }
+        }
+
+        button[type="submit"] {
+            font-size: 17px;
+            line-height: 24px;
+            font-weight: 500;
+            padding: 20px;
+            border-radius: 16px;
+            max-width: 200px;
+            align-self: center;
+            border: none;
+            background-color: #FFB267;
+            margin-top: 25px;
+            cursor: pointer;
+            transition: box-shadow .3s;
+
+            &:hover {
+                box-shadow: 0 0 8px rgba(255, 255, 255, .6);
+            }
+        }
+
+        .reg-btn {
+            display: block;
+            font-size: 17px;
+            line-height: 24px;
+            font-weight: 500;
+            padding: 20px;
+            border-radius: 16px;
+            max-width: 200px;
+            align-self: center;
+            border: none;
+            background-color: #FFB267;
+            margin: 25px auto 0;
+            cursor: pointer;
+            transition: box-shadow .3s;
+
+            &:hover {
+                box-shadow: 0 0 8px rgba(255, 255, 255, .6);
+            }
+        }
+    }
+</style>

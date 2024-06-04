@@ -12,9 +12,11 @@
 
 <style lang="scss">
   .page {
-    background-color: #0A182E;
+    flex-grow: 1;
+    background-color: #282424;
     max-width: 375px;
     width: 100%;
+    margin: auto;
     position: relative;
   }
 </style>
