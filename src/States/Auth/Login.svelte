@@ -30,6 +30,7 @@
           if (json.success) {
             localStorage.setItem('token', json.data.access_token);
             localStorage.setItem('userId', json.data.id);
+            localStorage.setItem('houseId', '3');
             $isAuth = true;
             alert('You have success login')
             return json.data;

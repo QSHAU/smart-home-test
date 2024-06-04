@@ -2,10 +2,10 @@
     import {getContext, onMount} from 'svelte';
     import Auth from '../../States/Auth/Auth.svelte';
     import MainView from '../../States/MainView/MainView.svelte';
-    import CreateForm from '../CreateForm/CreateForm.svelte';
+    import CreateRoomForm from '../CreateRoomForm/CreateRoomForm.svelte';
     import { loginUser } from '../../Data/AuthStore/AuthStore';
 
-    const {isAuth} = getContext('store');
+    const {isAuth, createFormActive} = getContext('store');
 
     onMount(() => {
         const token = localStorage.getItem('token');
@@ -20,9 +20,11 @@
 
 {#if !$isAuth}
     <Auth />
-  {:else}
-  <MainView />
-  <CreateForm />
-  {/if}
-  <!-- <MainView /> -->
-  <!-- <CreateForm /> -->
+{:else}
+    <MainView />
+    {#if $createFormActive}
+        <CreateRoomForm />
+    {/if}
+{/if}
+  <!-- <MainView />
+  <CreateForm /> -->

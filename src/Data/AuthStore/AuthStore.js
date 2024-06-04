@@ -12,10 +12,6 @@ export function logoutUser() {
     localStorage.removeItem('token');
 }
 
-export function getHouseId() {
-    return localStorage.getItem('houseId');
-}
-
 export function getToken() {
     return localStorage.getItem('token');
 }

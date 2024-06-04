@@ -1,13 +1,14 @@
 <script>
-  import { onMount } from "svelte";
-  import option from "../../Data/option";
-  import { getToken, getHouseId } from "../../Data/AuthStore/AuthStore";
+    import { getContext, onMount } from "svelte";
+    import option from "../../Data/option";
+    import { getToken } from "../../Data/AuthStore/AuthStore";
+
+    const {createFormActive} = getContext('store');
 
     let getAllHouses;
     onMount(async () => {
         const token = getToken();
-        const houseId = getHouseId();
-        const response = await fetch(`${option?.apiURL}rooms/allByUser/${houseId}`, {
+        const response = await fetch(`${option?.apiURL}rooms/allByHouse/${option?.houseId}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -23,17 +24,19 @@
             console.error('Error', json.message)
         }
     })
+    
+    const setFormActive = () => {
+        $createFormActive = !$createFormActive
+    }
 </script>
 <div class="home">
     <h2 class="home-title">
-        Добавить дом
+        Добавить комнату
     </h2>
     {#if getAllHouses?.length}
         {#each getAllHouses as house}
             {house.name}
         {/each}
     {/if}
-    <button class="appView-btn__add" type="button">
-        
-    </button>
+    <button class="appView-btn__add" type="button" on:click={setFormActive} />
 </div>

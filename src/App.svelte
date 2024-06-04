@@ -15,5 +15,6 @@
     background-color: #0A182E;
     max-width: 375px;
     width: 100%;
+    position: relative;
   }
 </style>

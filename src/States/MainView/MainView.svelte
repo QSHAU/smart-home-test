@@ -2,7 +2,6 @@
     import { getContext } from "svelte";
     import Header from "../../Components/Header/Header.svelte";
     import AppView from "../../Components/AppView/AppView.svelte";
-    import { logoutUser } from "../../Data/AuthStore/AuthStore";
 
 
     const {currentHome, user, isAuth} = getContext('store');
@@ -21,4 +20,4 @@
     <AppView />
 </div>
 
-<button on:click={logoutUser}></button>
+<!-- <button on:click={logoutUser}></button> -->

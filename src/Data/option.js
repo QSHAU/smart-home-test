@@ -1,3 +1,4 @@
 export default {
-    apiURL: 'http://172.120.6.73:1337/api/',
+    apiURL: 'http://192.168.0.104:1337/api/',
+    houseId: '3'
 }
