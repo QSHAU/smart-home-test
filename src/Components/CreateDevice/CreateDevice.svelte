@@ -2,30 +2,20 @@
   import { getContext } from "svelte";
     import api from "../../Data/api";
 
-    const {createFormActive, checkForm, allDevices, device, allRooms, favouriteDevices} = getContext('store');
+    const {createFormActive, checkForm, allDevices, device, allRooms, favouriteDevices, refreshDevices} = getContext('store');
 
     const setFormActive = () => {
         $createFormActive = !$createFormActive;
         $checkForm = 'createDevice';
     }
 
-    const checkDevices = async () => {
-        const response = await api.get(`device`);
-
-        return response;
-    }
-
-    const refreshDevices = async () => {
-        $allDevices = (await checkDevices()).data.data
-    }
-
     const removeDevice = async (id) => {
-        const response = await api.delete(`device/delete/${id}`)
+        await api.delete(`device/delete/${id}`)
         .then(function(response) {
             refreshDevices()
             alert(response.data.message)
         })
-        return response
+        return false
     }
 
     const deviceClick = (e, deviceItem) => {

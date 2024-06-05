@@ -11,7 +11,7 @@
     const formSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await api.post('user/create', {
+        await api.post('user/create', {
             username,
             email,
             password,
@@ -24,7 +24,7 @@
             console.error('Error', response.message)
         })
 
-        return response
+        return false
     }
 
     const changeAuth = (status) => {

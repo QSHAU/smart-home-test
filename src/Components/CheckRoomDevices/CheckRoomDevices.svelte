@@ -13,8 +13,8 @@
         currentRoomDevices,
     } = getContext('store');
 
-    let currentRoom,
-        rangeValue = 23;
+    let currentRoom;
+        // rangeValue = 23;
 
     const checkRoomClose = () => {
         $checkRoomDevices = false;

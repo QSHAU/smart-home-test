@@ -29,7 +29,7 @@
                 name: nameRoom,
                 house_id: option?.houseId
             })
-            .then(function (response) {
+            .then(() => {
                 refreshRooms();
                 alert('The room has been successfully created')
                 createFormDisable();
@@ -38,7 +38,7 @@
             .catch(function(response) {
                 console.log('error:', response)
             })
-            return response;
+            return false;
         } else if ($checkForm === 'createDevice') {
             if(!nameDevice) {
                 alert("Please, type something")
@@ -52,7 +52,7 @@
                 type: typeDevice,
                 room_id: $roomId || null
             })
-            .then(function (response) {
+            .then(() => {
                 $checkForm = false;
                 alert('The device has been successfully created')
                 refreshDevices()
@@ -61,7 +61,7 @@
             .catch(function(response) {
                 console.log('error:', response)
             })
-            return response;
+            return false;
         }
     }
 </script>

@@ -1,31 +1,31 @@
 <script>
     import { getContext } from "svelte";
     import api from "../../Data/api";
+    import option from "../../Data/option";
 
     const {isAuth} = getContext('store');
 
-    let userId = localStorage.getItem('userId');
-    let houseName;
-
     const getHouseName = async () => {
-        const response = await api.get(`house/allByUser/${userId}`)
-        houseName = response.data.data[0].name
-        return response.data.data[0].name
+        const response = await api.get(`house/${option?.houseId}`)
+        
+        return response.data.data.name
     }
 
     const logout = () => {
-        console.log('test');
         localStorage.clear();
         $isAuth = false;
         alert('You have been logout');
     }
     
-    getHouseName()
 </script>
 <header class="header">
     {#if $isAuth}
         <h3 class="header-name">
-            {houseName}
+            {#await getHouseName()}
+                Wait
+            {:then name} 
+                {name}
+            {/await}
         </h3>
         <button 
             class="header__logout" 

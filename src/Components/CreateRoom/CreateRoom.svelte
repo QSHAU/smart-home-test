@@ -3,19 +3,8 @@
     import option from "../../Data/option";
     import api from "../../Data/api";
 
-    const {createFormActive, allRooms, checkForm, roomId, checkRoomDevices} = getContext('store');
+    const {createFormActive, allRooms, checkForm, roomId, checkRoomDevices, refreshRooms} = getContext('store');
 
-    const checkRooms = async () => {
-        const response = await api.get(`rooms/allByHouse/${option?.houseId}`);
-
-        return response;
-    }
-
-    const refreshRooms = async () => {
-        $allRooms = (await checkRooms()).data.data;
-    }
-
-    
     const setFormActive = () => {
         $createFormActive = !$createFormActive;
         $checkForm = 'createRoom';
@@ -24,16 +13,14 @@
     const removeRoom = async ( id) => {
         const response = await api.delete(`rooms/delete/${id}`)
         .then(function(response) {
-            console.log(response);
             if(!response.data.success) {
                 alert("You can't delete a room if a device is linked to it")
-                console.log(response);
             } else {
                 refreshRooms();
                 alert(response.data.message)
             }
         })
-        return response
+        return false
     }
 
     const roomDevices = (e, id) => {
