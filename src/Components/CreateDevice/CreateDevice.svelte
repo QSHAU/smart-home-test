@@ -2,7 +2,7 @@
   import { getContext } from "svelte";
     import api from "../../Data/api";
 
-    const {createFormActive, checkForm, allDevices, device, allRooms} = getContext('store');
+    const {createFormActive, checkForm, allDevices, device, allRooms, favouriteDevices} = getContext('store');
 
     const setFormActive = () => {
         $createFormActive = !$createFormActive;
@@ -29,9 +29,24 @@
     }
 
     const deviceClick = (e, deviceItem) => {
-        if(e.target?.className.includes('device-item__remove')) return false;
+        if(e.target?.className.includes('device-item__remove') || e.target?.className.includes('device-item__favourite')) return false;
         $device = deviceItem
     }
+
+    const setDeviceFavourite = (device) => {
+        let isDeviceFavourite = $favouriteDevices.includes(device?.id)
+        
+        if(isDeviceFavourite) {
+            $favouriteDevices = $favouriteDevices.filter(favourite => {
+                return favourite !== device?.id
+            })
+        } else {
+            $favouriteDevices.push(device?.id);
+        }
+        localStorage.setItem('favouriteItems', JSON.stringify($favouriteDevices))
+        $favouriteDevices = $favouriteDevices
+    }
+
 
 </script>
 
@@ -50,6 +65,11 @@
                     <span class="device-item__type">
                         {device?.type}
                     </span>
+                    <button class="device-item__favourite"
+                        class:isActive={$favouriteDevices && $favouriteDevices.includes(device?.id)}
+                        on:click={() => setDeviceFavourite(device)}
+                    >
+                    </button>
                     <span class="device-item__room">
                         {#if $allRooms}
                             {$allRooms.filter(
@@ -165,6 +185,40 @@
 
                 &::after {
                     transform: translate(-50%, -50%) rotate(-45deg);
+                }
+            }
+
+            &__favourite {
+                width: 25px;
+                height: 25px;
+                background-color: transparent;
+                padding: 0;
+                border: none;
+                cursor: pointer;
+                left: 5px;
+                bottom: 5px;
+                position: absolute;
+
+                &::before {
+                    content: '';
+                    width: 20px;
+                    height: 20px;
+                    background-image: url(../../../public/icons/favourite.png);
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    filter: invert(1);
+                    transition: all .3s;
+                    opacity: .6;
+                    transform: translate(-50%, -50%);
+                    top: 50%;
+                    left: 50%;
+                    position: absolute;
+                }
+
+                &.isActive::before {
+                    opacity: 1;
+                    filter: invert(0);
                 }
             }
         }

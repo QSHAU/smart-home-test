@@ -9,12 +9,12 @@
         roomId, 
         allDevices, 
         checkRoomDevices, 
-        refreshDevices, 
         allRooms, 
         currentRoomDevices,
     } = getContext('store');
 
-    let currentRoom;
+    let currentRoom,
+        rangeValue = 23;
 
     const checkRoomClose = () => {
         $checkRoomDevices = false;
@@ -31,16 +31,28 @@
             $currentRoomDevices = $allDevices.filter((item) => {
                 return item.room_id === $roomId
             })
-            console.log($currentRoomDevices);
         }
     }
 
-    const deviceActivate = async (id, activeDevice) => {
+    const deviceActivate = async (e, id) => {
+        let activeStatus = e.target.className.includes('active');
+
         await api.put(`device/updateInfo/${id}`, {
-            active: !activeDevice
+            active: !activeStatus
         })
-        
+
+        if(activeStatus) {
+            e.target.classList.remove('active')
+        } else {
+            e.target.classList.add('active')
+        }
     }
+
+    // const changeTemp = async (id) => {
+    //     await api.put(`device/updateInfo/${id}`, {
+    //         temperature: rangeValue
+    //     })
+    // }
 
     onMount(() => {
         getRoomDevices()
@@ -48,6 +60,7 @@
             return item?.id === $roomId
         })
     })
+
 </script>
 
 <div class="checkRoom" transition:fade>
@@ -66,12 +79,27 @@
                     <span class="checkRoom-item__type">
                         {roomDevice?.type}
                     </span>
+                    {#if roomDevice?.type === 'conditioner' || 
+                        roomDevice?.type === 'thermostat' || 
+                        roomDevice?.type === 'heating'
+                    }
+                    <!-- <label class="checkRoom-item__temperature">
+                        {rangeValue}
+                        <input  
+                            type="range"
+                            min="16"
+                            max="30"
+                            bind:value={rangeValue}
+                            on:change={() => changeTemp(roomDevice?.id)}
+                        />
+                    </label> -->
+                    {/if}
                     {roomDevice?.name}
                     <button 
                         class="checkRoom-item__activate" 
                         type="button"
                         class:active={roomDevice?.active}
-                        on:click={() => deviceActivate(roomDevice?.id, roomDevice?.active)}
+                        on:click={(e) => deviceActivate(e, roomDevice?.id)}
                     >
                         <span></span>
                     </button>
@@ -96,6 +124,7 @@
     .checkRoom {
         width: 100%;
         height: 100%;
+        overflow: auto;
         color: #FFF;
         padding: 15px;
         background-color: #282424;
@@ -128,7 +157,7 @@
             display: flex;
             justify-content: center;
             text-align: center;
-            height: 150px;
+            height: 200px;
             border-radius: 8px;
             padding: 15px;
             background-color: #454545;
@@ -153,7 +182,7 @@
                 border: none;
                 padding: 0;
                 transform: translate(-50%, -50%);
-                top: 50%;
+                top: calc(50% - 20px);
                 left: 50%;
                 transition: background .3s;
                 cursor: pointer;
@@ -167,6 +196,7 @@
                     background-color: #FFB267;
                     transition: all .3s;
                     transform: translateY(-50%);
+                    pointer-events: none;
                     top: 50%;
                     left: 3px;
                     position: absolute;
@@ -180,6 +210,16 @@
                         left: calc(100% - 23px);
                     }
                 }
+            }
+
+            &__temperature {
+                display: block;
+                width: auto;
+                height: auto;
+                transform: translate(-50%, -50%);
+                top: calc(50% + 20px);
+                left: 50%;
+                position: absolute;
             }
         }
 

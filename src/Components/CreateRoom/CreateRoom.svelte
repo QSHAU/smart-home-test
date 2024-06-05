@@ -21,7 +21,7 @@
         $checkForm = 'createRoom';
     }
 
-    const removeRoom = async (id) => {
+    const removeRoom = async ( id) => {
         const response = await api.delete(`rooms/delete/${id}`)
         .then(function(response) {
             console.log(response);
@@ -36,7 +36,8 @@
         return response
     }
 
-    const roomDevices = (id) => {
+    const roomDevices = (e, id) => {
+        if(e.target.className.includes('room-item__remove')) return false;
         $roomId = id
         $checkRoomDevices = true;
     }
@@ -55,7 +56,7 @@
             {#each $allRooms as room}
             <!-- svelte-ignore a11y-no-static-element-interactions -->
             <div class="room-item"
-                 on:mouseup={() => roomDevices(room.id)}>
+                 on:mouseup={(e) => roomDevices(e, room.id)}>
                 {room.name}
                 <button 
                     class="room-item__remove" 
