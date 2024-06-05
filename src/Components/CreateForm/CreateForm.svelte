@@ -42,33 +42,41 @@
     const createForm = async (e) => {
         e.preventDefault();
         if($checkForm === 'createRoom') {
+            if(!nameRoom?.length) {
+                alert('Please, type something')
+                return false;
+            }
             const response = await api.post('rooms/create', {
                 name: nameRoom,
                 house_id: option?.houseId
             })
             .then(function (response) {
                 refreshRooms();
-                alert('Успешно')
+                alert('The room has been successfully created')
                 createFormDisable();
                 $checkForm = false;
-                console.log('success:', response);
             })
             .catch(function(response) {
                 console.log('error:', response)
             })
             return response;
         } else if ($checkForm === 'createDevice') {
-            if(!typeDevice) return false;
+            if(!nameDevice) {
+                alert("Please, type something")
+                return false
+            } else if(!typeDevice) {
+                alert("Please, choose something")
+                return false;
+            }
             const response = await api.post('device/create', {
                 name: nameDevice,
                 type: typeDevice,
             })
             .then(function (response) {
                 $checkForm = false;
-                alert('Успешно')
+                alert('The device has been successfully created')
                 refreshDevices()
                 createFormDisable();
-                console.log('success:', response);
             })
             .catch(function(response) {
                 console.log('error:', response)
@@ -106,7 +114,7 @@
             </label>
             <div class="device-items">
                 {#each option?.deviceList as device}
-                    <button 
+                    <button
                         class="device-item"
                         class:active={device?.type === typeDevice}
                         on:click={() => choosedDevice(device?.type)}

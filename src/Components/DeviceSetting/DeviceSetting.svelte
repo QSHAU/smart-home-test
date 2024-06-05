@@ -1,9 +1,10 @@
 <script>
-    import {getContext} from 'svelte';
+    import { fade } from 'svelte/transition';
+    import {getContext, onMount} from 'svelte';
     import api from '../../Data/api';
-  import option from '../../Data/option';
+    import option from '../../Data/option';
 
-    const {allRooms, roomId, device} = getContext('store');
+    const {allRooms, roomId, device, refreshRooms, refreshDevices} = getContext('store');
     
     let nameDevice
 
@@ -17,7 +18,11 @@
             room_id: $roomId
         })
         .then(function(response) {
-            console.log(response)
+            alert(response?.data?.message)
+        })
+        .catch(function(response) {
+            alert('Something went wrong')
+            console.log(response?.data?.message)
         })
     }
 
@@ -29,7 +34,11 @@
             type: $device?.type
         })
         .then(function(response) {
-            console.log(response)
+            alert(response?.data?.message)
+        })
+        .catch(function(response) {
+            alert('Something went wrong')
+            console.log(response?.data?.message)
         })
     }
 
@@ -37,9 +46,19 @@
         $roomId = false;
         $device = false;
     }
+
+    onMount(() => {
+        refreshRooms();
+        refreshDevices();
+        if($device?.room_id) {
+            $roomId = $device?.room_id
+        }
+    })
 </script>
 
-<div class="deviceSettings">
+<div class="deviceSettings"
+     transition:fade
+     >
     <div class="deviceSettings-rename">
         <h3 class="deviceSettings-title">
             Device settings
@@ -139,6 +158,7 @@
                 background-color: transparent;
                 border: 1px solid #f8f8f8;
                 outline: none;
+                margin-bottom: 15px;
 
                 &::placeholder {
                     color: #ccc;
@@ -184,7 +204,29 @@
             }
         }
 
-        &-close {
+        button {
+            display: block;
+            width: 200px;
+            font-size: 17px;
+            line-height: 24px;
+            font-weight: 500;
+            color: #211D1D;
+            background-color: #FFB267;
+            padding: 20px;
+            margin-top: auto;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            margin: 0 auto;
+            border-radius: 20px;
+            transition: box-shadow .3s;
+
+            &:hover {
+                box-shadow: 0px 0px 12px rgba(255, 255, 255, 0.7);
+            }
+        }
+
+        .deviceSettings-close {
             display: inline-block;
             width: 20px;
             height: 20px;
@@ -193,6 +235,8 @@
             top: 10px;
             right: 10px;
             cursor: pointer;
+            border-radius: 0;
+            box-shadow: none;
             position: absolute;
 
             &::before,
@@ -214,30 +258,9 @@
             &::after {
                 transform: translate(-50%, -50%) rotate(45deg);
             }
-        }
 
-        &-attach {
-
-            &__btn {
-                display: block;
-                width: 200px;
-                font-size: 17px;
-                line-height: 24px;
-                font-weight: 500;
-                color: #211D1D;
-                background-color: #FFB267;
-                padding: 20px;
-                margin-top: auto;
-                outline: none;
-                border: none;
-                cursor: pointer;
-                margin: 0 auto;
-                border-radius: 20px;
-                transition: box-shadow .3s;
-
-                &:hover {
-                    box-shadow: 0px 0px 12px rgba(255, 255, 255, 0.7);
-                }
+            &:hover {
+                box-shadow: none;
             }
         }
     }

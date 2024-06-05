@@ -2,7 +2,7 @@
   import { getContext } from "svelte";
     import api from "../../Data/api";
 
-    const {createFormActive, checkForm, allDevices, device} = getContext('store');
+    const {createFormActive, checkForm, allDevices, device, allRooms} = getContext('store');
 
     const setFormActive = () => {
         $createFormActive = !$createFormActive;
@@ -28,8 +28,9 @@
         return response
     }
 
-    const deviceClick = (devicee) => {
-        $device = devicee
+    const deviceClick = (e, deviceItem) => {
+        if(e.target?.className.includes('device-item__remove')) return false;
+        $device = deviceItem
     }
 
 </script>
@@ -42,10 +43,23 @@
         {#if $allDevices?.length}
             {#each $allDevices as device}
                 <div class="device-item"
-                    on:click={() => deviceClick(device)}>
+                    on:click={(e) => deviceClick(e, device)}>
                     {device.name}
                     <span class="device-item__type">
                         {device?.type}
+                    </span>
+                    <span class="device-item__room">
+                        {#if $allRooms}
+                            {$allRooms.filter(
+                                item => {
+                                    return device?.room_id === item?.id
+                                })
+                                ?.[0]?.name || 
+                                'Not attached'
+                            }
+                        {:else}
+                            No rooms found
+                        {/if}
                     </span>
                     <button 
                         class="device-item__remove"
@@ -102,7 +116,8 @@
                 box-shadow: 0px 0px 12px rgba(255, 255, 255, 0.7);
             }
 
-            &__type {
+            &__type,
+            &__room {
                 font-size: 12px;
                 line-height: 14px;
                 color: rgba(255, 255, 255, 0.6);
@@ -111,6 +126,13 @@
                 bottom: 5px;
                 left: 50%;
                 position: absolute;
+            }
+
+            &__room {
+                bottom: unset;
+                top: 10px;
+                left: 10px;
+                transform: unset;
             }
 
             &__remove {

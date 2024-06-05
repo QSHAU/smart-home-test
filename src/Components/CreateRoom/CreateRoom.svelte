@@ -24,8 +24,14 @@
     const removeRoom = async (id) => {
         const response = await api.delete(`rooms/delete/${id}`)
         .then(function(response) {
-            refreshRooms();
-            alert(response.data.message)
+            console.log(response);
+            if(!response.data.success) {
+                alert("You can't delete a room if a device is linked to it")
+                console.log(response);
+            } else {
+                refreshRooms();
+                alert(response.data.message)
+            }
         })
         return response
     }
