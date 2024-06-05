@@ -63,7 +63,7 @@
                             No rooms found
                         {/if}
                     </span>
-                    <button 
+                    <button
                         class="device-item__remove"
                         type="button"
                         on:click={() => removeDevice(device.id)}

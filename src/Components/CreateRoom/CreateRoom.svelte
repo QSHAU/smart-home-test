@@ -3,7 +3,7 @@
     import option from "../../Data/option";
     import api from "../../Data/api";
 
-    const {createFormActive, allRooms, checkForm, roomId} = getContext('store');
+    const {createFormActive, allRooms, checkForm, roomId, checkRoomDevices} = getContext('store');
 
     const checkRooms = async () => {
         const response = await api.get(`rooms/allByHouse/${option?.houseId}`);
@@ -38,6 +38,7 @@
 
     const roomDevices = (id) => {
         $roomId = id
+        $checkRoomDevices = true;
     }
 
     onMount(async () => {

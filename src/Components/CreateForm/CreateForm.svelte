@@ -4,40 +4,19 @@
     import option from "../../Data/option";
     import api from "../../Data/api";
 
-    const {createFormActive, allRooms, checkForm, allDevices} = getContext('store')
+    const {createFormActive, checkForm, roomId, refreshDevices, refreshRooms} = getContext('store')
     
     let nameRoom,
         nameDevice,
         typeDevice;
 
-    const checkRooms = async () => {
-        const response = await api.get(`rooms/allByHouse/${option?.houseId}`);
-
-        return response;
-    }
-
     const choosedDevice = (type) => {
         typeDevice = type;
-    }
-
-    const refreshRooms = async () => {
-        $allRooms = (await checkRooms()).data.data;
     }
 
     const createFormDisable = () => {
         $createFormActive = !$createFormActive;
     }
-
-    const checkDevices = async () => {
-        const response = await api.get(`device`);
-
-        return response;
-    }
-
-    const refreshDevices = async () => {
-        $allDevices = (await checkDevices()).data.data
-    }
-
 
     const createForm = async (e) => {
         e.preventDefault();
@@ -71,6 +50,7 @@
             const response = await api.post('device/create', {
                 name: nameDevice,
                 type: typeDevice,
+                room_id: $roomId || null
             })
             .then(function (response) {
                 $checkForm = false;
@@ -145,6 +125,7 @@
         height: 100%;
         background-color: #211D1D;
         padding: 15px;
+        z-index: 10;
         top: 0;
         right: 0;
         bottom: 0;

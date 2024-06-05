@@ -12,6 +12,8 @@
     const checkForm = writable(false);
     const roomId = writable(false);
     const device = writable(false);
+    const currentRoomDevices = writable(false);
+    const checkRoomDevices = writable(false);
 
     const checkRooms = async () => {
         const response = await api.get(`rooms/allByHouse/${option?.houseId}`);
@@ -42,6 +44,8 @@
         roomId,
         checkForm,
         device,
+        checkRoomDevices,
+        currentRoomDevices,
         refreshRooms,
         refreshDevices
     })

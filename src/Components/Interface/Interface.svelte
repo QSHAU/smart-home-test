@@ -25,7 +25,7 @@
     });
 </script>
 
-<!-- {#if !$isAuth}
+{#if !$isAuth}
     <Auth />
 {:else}
     <MainView />
@@ -38,6 +38,4 @@
     {#if $device}
         <DeviceSetting />
     {/if}
-{/if} -->
-
-<CheckRoomDevices />
+{/if}

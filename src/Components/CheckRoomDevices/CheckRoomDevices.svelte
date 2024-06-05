@@ -1,44 +1,94 @@
 <script>
     import { getContext, onMount } from "svelte";
+    import { fade } from "svelte/transition";
+    import api from "../../Data/api";
 
-    const {createFormActive, checkForm, roomId, allDevices} = getContext('store');
+    const {
+        createFormActive, 
+        checkForm, 
+        roomId, 
+        allDevices, 
+        checkRoomDevices, 
+        refreshDevices, 
+        allRooms, 
+        currentRoomDevices,
+    } = getContext('store');
 
-    let test;
+    let currentRoom;
+
+    const checkRoomClose = () => {
+        $checkRoomDevices = false;
+        $roomId = false;
+    }
+
+    const addNewRoomDevice = () => {
+        $checkForm = 'createDevice';
+        $createFormActive = !$createFormActive;
+    }
+
     const getRoomDevices = () => {
-        test = $allDevices.filter((item) => {
-            item.room_id === roomId
+        if($allDevices) {
+            $currentRoomDevices = $allDevices.filter((item) => {
+                return item.room_id === $roomId
+            })
+            console.log($currentRoomDevices);
+        }
+    }
+
+    const deviceActivate = async (id, activeDevice) => {
+        await api.put(`device/updateInfo/${id}`, {
+            active: !activeDevice
         })
+        
     }
 
     onMount(() => {
         getRoomDevices()
-        // getAllDevices();
+        currentRoom = $allRooms.filter(item => {
+            return item?.id === $roomId
+        })
     })
-
-    const checkRoomDevices = async () => {
-        // const response = await api.
-    }
 </script>
 
-<div class="checkRoom">
+<div class="checkRoom" transition:fade>
+    <h3 class="checkRoom-name">
+        {#if currentRoom}
+            {currentRoom?.[0]?.name}
+        {/if}
+    </h3>
     <h3 class="checkRoom-title">
         Room devices
     </h3>
-    <!-- {#if $checkRoomDevices?.length}
-        <div class="checkRoom-items">
-            {#each $checkRoomDevices as roomDevice}
-                {roomDevice}
+    <div class="checkRoom-items">
+        {#if $currentRoomDevices?.length}
+            {#each $currentRoomDevices as roomDevice}
+                <div class="checkRoom-item">
+                    <span class="checkRoom-item__type">
+                        {roomDevice?.type}
+                    </span>
+                    {roomDevice?.name}
+                    <button 
+                        class="checkRoom-item__activate" 
+                        type="button"
+                        class:active={roomDevice?.active}
+                        on:click={() => deviceActivate(roomDevice?.id, roomDevice?.active)}
+                    >
+                        <span></span>
+                    </button>
+                </div>
             {/each}
-            <button
-                class="checkRoom-btn" 
-                type="button"
-                on:click={addDevice}
-            />
+        {/if}
+        <button 
+            class="add-btn"
+            class:isAlone={!$currentRoomDevices?.length}
+            type="button" 
+            on:click={addNewRoomDevice}
+        />
         </div>
-    {/if} -->
     <button 
         class="checkRoom-close"
         type="button"
+        on:click={checkRoomClose}
     />
 </div>
 
@@ -55,11 +105,82 @@
         left: 0;
         position: absolute;
 
+        &-name {
+            font-size: 32px;
+        }
+
         &-title {
             font-size: 28px;
             line-height: 1;
             color: #F8F8F8;
             margin-bottom: 32px;
+        }
+
+        &-items {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-auto-rows: 1fr;
+            grid-gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        &-item {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            height: 150px;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #454545;
+            position: relative;
+
+            &__type {
+                font-size: 12px;
+                line-height: 14px;
+                color: rgba(255, 255, 255, 0.6);
+                text-transform: capitalize;
+                transform: translateX(-50%);
+                bottom: 5px;
+                left: 50%;
+                position: absolute;
+            }
+
+            &__activate {
+                width: 50px;
+                height: 26px;
+                background-color: #282424;
+                border-radius: 20px;
+                border: none;
+                padding: 0;
+                transform: translate(-50%, -50%);
+                top: 50%;
+                left: 50%;
+                transition: background .3s;
+                cursor: pointer;
+                position: absolute;
+
+                span {
+                    display: block;
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    background-color: #FFB267;
+                    transition: all .3s;
+                    transform: translateY(-50%);
+                    top: 50%;
+                    left: 3px;
+                    position: absolute;
+                }
+
+                &.active {
+                    background-color: #FFB267;
+
+                    span {
+                        background-color: #282424;
+                        left: calc(100% - 23px);
+                    }
+                }
+            }
         }
 
         &-close {
