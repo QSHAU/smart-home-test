@@ -52,6 +52,7 @@
     <div class="room-items">
         {#if $allRooms?.length}
             {#each $allRooms as room}
+            <!-- svelte-ignore a11y-no-static-element-interactions -->
             <div class="room-item"
                  on:mouseup={() => roomDevices(room.id)}>
                 {room.name}

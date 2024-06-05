@@ -1,23 +1,11 @@
 <script>
     import { getContext, onMount } from "svelte";
-    import api from "../../Data/api";
 
-    const {createFormActive, checkForm, roomId} = getContext('store');
-    
-    let allDevices;
-    const addDevice = () => {
-        $checkForm = 'createDevice';
-        $createFormActive = !$createFormActive;
-    }
+    const {createFormActive, checkForm, roomId, allDevices} = getContext('store');
 
-    const getAllDevices = async () => {
-        const response = await api.get('device');
-        
-        return response.data.data
-    }
-
-    const getRoomDevices = async () => {
-        allDevices = (await getAllDevices()).filter((item) => {
+    let test;
+    const getRoomDevices = () => {
+        test = $allDevices.filter((item) => {
             item.room_id === roomId
         })
     }
@@ -34,7 +22,7 @@
 
 <div class="checkRoom">
     <h3 class="checkRoom-title">
-        Устройства комнаты
+        Room devices
     </h3>
     <!-- {#if $checkRoomDevices?.length}
         <div class="checkRoom-items">
@@ -48,16 +36,68 @@
             />
         </div>
     {/if} -->
+    <button 
+        class="checkRoom-close"
+        type="button"
+    />
 </div>
 
 <style lang="scss">
     .checkRoom {
+        width: 100%;
+        height: 100%;
+        color: #FFF;
+        padding: 15px;
+        background-color: #282424;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        position: absolute;
 
         &-title {
             font-size: 28px;
             line-height: 1;
             color: #F8F8F8;
             margin-bottom: 32px;
+        }
+
+        &-close {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: none;
+            background-color: transparent;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            border-radius: 0;
+            box-shadow: none;
+            position: absolute;
+
+            &::before,
+            &::after {
+                content: '';
+                width: 15px;
+                height: 2px;
+                border-radius: 2px;
+                background-color: #fff;
+                top: 50%;
+                left: 50%;
+                position: absolute;
+            }
+
+            &::before {
+                transform: translate(-50%, -50%) rotate(-45deg);
+            }
+
+            &::after {
+                transform: translate(-50%, -50%) rotate(45deg);
+            }
+
+            &:hover {
+                box-shadow: none;
+            }
         }
     }
 </style>

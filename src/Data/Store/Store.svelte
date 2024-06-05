@@ -11,7 +11,6 @@
     const allDevices = writable(false);
     const checkForm = writable(false);
     const roomId = writable(false);
-    // const deviceId = writable(false);
     const device = writable(false);
 
     const checkRooms = async () => {
@@ -45,7 +44,6 @@
         device,
         refreshRooms,
         refreshDevices
-        // deviceId,
     })
 </script>
 

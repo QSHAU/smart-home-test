@@ -88,6 +88,8 @@
         {#if $allRooms.length}
             <div class="deviceSettings-items">
                 {#each $allRooms as room}
+                <!-- svelte-ignore a11y-no-static-element-interactions -->
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div class="deviceSettings-item"
                     class:active={room?.id === $roomId}
                     on:click={() => roomDevices(room?.id)}>

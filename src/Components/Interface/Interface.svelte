@@ -25,18 +25,19 @@
     });
 </script>
 
-{#if !$isAuth}
+<!-- {#if !$isAuth}
     <Auth />
 {:else}
     <MainView />
     {#if $createFormActive}
         <CreateForm />
     {/if}
-    <!-- {#if $checkRoomDevices}
-
-    {/if} -->
-    <!-- <CheckRoomDevices /> -->
+    {#if $checkRoomDevices}
+        <CheckRoomDevices />
+    {/if}
     {#if $device}
         <DeviceSetting />
     {/if}
-{/if}
+{/if} -->
+
+<CheckRoomDevices />

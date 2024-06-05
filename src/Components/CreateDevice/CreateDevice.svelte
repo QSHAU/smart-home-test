@@ -42,6 +42,8 @@
     <div class="device-items">
         {#if $allDevices?.length}
             {#each $allDevices as device}
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <!-- svelte-ignore a11y-no-static-element-interactions -->
                 <div class="device-item"
                     on:click={(e) => deviceClick(e, device)}>
                     {device.name}
