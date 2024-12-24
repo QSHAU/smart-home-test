@@ -22,7 +22,7 @@
         }
     });
 </script>
-
+<!-- 
 {#if !$isAuth}
     <Auth />
 {:else}
@@ -36,4 +36,4 @@
     {#if $device}
         <DeviceSetting />
     {/if}
-{/if}
+{/if} -->

@@ -1,6 +1,6 @@
 export default {
-    apiURL: 'http://172.120.6.73:1337/api/',
-    houseId: '3',
+    apiURL: 'http://172.120.0.29:1337/api/',
+    houseId: '2',
     deviceList: [
         {
             name: 'Lamp',

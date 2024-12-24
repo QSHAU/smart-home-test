@@ -5,7 +5,6 @@
     import option from "../option";
 
     const isAuth = writable(false);
-    const authStatus = writable(false);
     const createFormActive = writable(false);
     const allRooms = writable(false);
     const allDevices = writable(false);
@@ -39,7 +38,6 @@
 
     setContext('store', {
         isAuth,
-        authStatus,
         createFormActive,
         allRooms,
         allDevices,

@@ -2,29 +2,35 @@
     import { getContext } from "svelte";
     import api from "../../Data/api";
     import option from "../../Data/option";
+    import {navigate} from "svelte-routing";
 
     const {isAuth} = getContext('store');
 
     const getHouseName = async () => {
         const response = await api.get(`house/${option?.houseId}`)
-        
-        return response.data.data.name
+        if(response.data.success) {
+            return response.data.data.name
+        } else {
+            return response.data.message
+        }
     }
 
     const logout = () => {
         localStorage.clear();
         $isAuth = false;
         alert('You have been logout');
+        navigate('/login', {replace: true})
     }
     
 </script>
 <header class="header">
-    {#if $isAuth}
         <h3 class="header-name">
             {#await getHouseName()}
                 Wait
             {:then name} 
                 {name}
+            {:catch error}
+                
             {/await}
         </h3>
         <button 
@@ -32,13 +38,12 @@
             type="button"
             on:click={logout}
         >Logout</button>
-    {:else}
+    <!-- {:else}
         <button 
             class="header__login" 
             type="button"
             
-        >Login</button>
-    {/if}
+        >Login</button> -->
 </header>
 
 <style lang="scss">

@@ -1,9 +1,10 @@
 <script>
     import { getContext } from "svelte";
+    import { link, navigate } from 'svelte-routing';
     import api from "../../Data/api";
 
   
-    const {isAuth, authStatus} = getContext('store');
+    const {isAuth} = getContext('store');
     
     let email;
     let password;
@@ -30,17 +31,13 @@
             localStorage.setItem('houseId', '3');
             $isAuth = true;
             alert('You have success login')
+            navigate('/smart-home', { replace: true })
             return response.data.data;
         })
         .catch(function (error) {
             console.log(error);
         });
     }
-
-    const changeAuth = (status) => {
-        $authStatus = status;
-    }
-  
 </script>
 
 <div class="login">
@@ -55,11 +52,13 @@
         </label>
         <button type="submit">Log In</button>
     </form>
-    <button class="reg-btn" type="button" on:click={() => changeAuth(true)}>Sign Up</button>
+    <a class="reg-btn" href="/register" use:link>Sign Up</a>
 </div>
 
 <style lang="scss">
     .login {
+        display: flex;
+        flex-direction: column;
         width: 100%;
         transform: translate(-50%, -50%);
         top: 50%;
@@ -121,10 +120,12 @@
         }
 
         .reg-btn {
-            display: block;
+            display: inline-block;
             font-size: 17px;
             line-height: 24px;
             font-weight: 500;
+            color: #000;
+            text-decoration: none;
             padding: 20px;
             border-radius: 16px;
             max-width: 200px;

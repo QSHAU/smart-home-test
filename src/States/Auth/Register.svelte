@@ -1,8 +1,8 @@
 <script>
     import { getContext } from "svelte";
     import api from "../../Data/api";
+    import { link } from 'svelte-routing';
 
-    const {authStatus} = getContext('store');
     
     let username;
     let email;
@@ -26,10 +26,6 @@
 
         return false
     }
-
-    const changeAuth = (status) => {
-        $authStatus = status;
-    }
 </script>
 
 <div class="register">
@@ -48,11 +44,13 @@
         </label>
         <button type="submit">Create account</button>
     </form>
-    <button class="log-btn" type="button" on:click={() => changeAuth(false)}>Sign In</button>
+    <a class="log-btn" href="/login" use:link>Sign In</a>
 </div>
 
 <style lang="scss">
     .register {
+        display: flex;
+        flex-direction: column;
         width: 100%;
         transform: translate(-50%, -50%);
         top: 50%;
@@ -114,10 +112,12 @@
         }
 
         & .log-btn {
-            display: block;
+            display: inline-block;
             font-size: 17px;
             line-height: 24px;
             font-weight: 500;
+            color: #000;
+            text-decoration: none;
             padding: 20px;
             border-radius: 16px;
             max-width: 200px;

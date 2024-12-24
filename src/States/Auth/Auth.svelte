@@ -1,14 +1,14 @@
 <script>
-    import { getContext } from "svelte";
-    import Login from "./Login.svelte";
-    import Register from "./Register.svelte";
+    import { Router, Route } from "svelte-routing";
+    import { getContext, onMount } from "svelte";
 
-    const { authStatus } = getContext('store');
+    onMount(() => {
+        if(window.location.pathname === '/auth') {
+            window.location.href = "/auth/login";
+        }
+    });
 
 </script>
+<Router basepath="/auth">
 
-{#if $authStatus}
-    <Register/>
-{:else}
-    <Login />
-{/if}
+</Router>
