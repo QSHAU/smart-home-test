@@ -1,5 +1,5 @@
 <script>
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
     import api from "../../Data/api";
 
     const {createFormActive, checkForm, allDevices, device, allRooms, favouriteDevices, refreshDevices} = getContext('store');
@@ -37,7 +37,9 @@
         $favouriteDevices = $favouriteDevices
     }
 
-
+    onMount(() => {
+        refreshDevices();
+    })
 </script>
 
 <div class="device">

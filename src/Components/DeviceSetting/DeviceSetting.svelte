@@ -18,7 +18,8 @@
             room_id: $roomId
         })
         .then(function(response) {
-            alert(response?.data?.message)
+            alert(response?.data?.message);
+            refreshDevices();
         })
         .catch(function(response) {
             alert('Something went wrong')

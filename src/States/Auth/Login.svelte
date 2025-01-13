@@ -35,6 +35,7 @@
             return response.data.data;
         })
         .catch(function (error) {
+            alert('Incorrect login or password');
             console.log(error);
         });
     }

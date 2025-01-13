@@ -29,8 +29,6 @@
                 Wait
             {:then name} 
                 {name}
-            {:catch error}
-                
             {/await}
         </h3>
         <button 
@@ -38,12 +36,6 @@
             type="button"
             on:click={logout}
         >Logout</button>
-    <!-- {:else}
-        <button 
-            class="header__login" 
-            type="button"
-            
-        >Login</button> -->
 </header>
 
 <style lang="scss">

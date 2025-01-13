@@ -7,6 +7,7 @@
     const isAuth = writable(false);
     const createFormActive = writable(false);
     const allRooms = writable(false);
+    const allHouses = writable(false);
     const allDevices = writable(false);
     const checkForm = writable(false);
     const roomId = writable(false);
@@ -14,6 +15,11 @@
     const currentRoomDevices = writable(false);
     const checkRoomDevices = writable(false);
     const favouriteDevices = writable(JSON.parse(localStorage.getItem('favouriteItems')) || []);
+
+    const checkHouses = async () => {
+        const response = await api.get(`house/allByUser/${localStorage.getItem('userId')}`)
+        return response
+    }
 
 
     const checkRooms = async () => {
@@ -40,6 +46,7 @@
         isAuth,
         createFormActive,
         allRooms,
+        allHouses,
         allDevices,
         roomId,
         checkForm,
@@ -48,7 +55,8 @@
         currentRoomDevices,
         favouriteDevices,
         refreshRooms,
-        refreshDevices
+        refreshDevices,
+        checkHouses,
     })
 </script>
 

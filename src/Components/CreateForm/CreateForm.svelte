@@ -126,6 +126,7 @@
         background-color: #211D1D;
         padding: 15px;
         z-index: 10;
+        overflow: auto;
         top: 0;
         right: 0;
         bottom: 0;
@@ -142,6 +143,7 @@
         &-form {
             display: flex;
             flex-direction: column;
+            gap: 25px;
             flex-grow: 1;
         }
 
@@ -151,7 +153,6 @@
             font-size: 16px;
             color: #FFF;
             gap: 5px;
-            margin-bottom: 25px;
         }
 
         .name-input {

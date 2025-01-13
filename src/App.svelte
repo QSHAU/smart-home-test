@@ -1,33 +1,45 @@
 <script>
-  import { Router, Route, navigate } from "svelte-routing";
-  import Login from "./States/Auth/Login.svelte";
-  import Register from "./States/Auth/Register.svelte";
-  import MainView from "./States/MainView/MainView.svelte";
-  import NotFound from "./States/NotFound/NotFound.svelte";
+  import { Router } from "svelte-routing";
+  import LazyRoute from "./Components/LazyRoute/LazyRoute.svelte";
   import Store from "./Data/Store/Store.svelte";
   import api from "./Data/api";
-  import { onMount } from "svelte";
+  import AuthMiddleware from "./Middleware/AuthMiddleware.svelte";
+
+  const Login = () => import("./States/Auth/Login.svelte").then(delayModuleLoad);
+  const Register = () => import("./States/Auth/Register.svelte").then(delayModuleLoad);
+  const MainView = () => import("./States/MainView/MainView.svelte").then(delayModuleLoad);
+  const NotFound = () => import("./States/NotFound/NotFound.svelte").then(delayModuleLoad);
 
   const isAuth = async() => {
     const result = await api.get('/auth/isAuth');
-		return result.data.success;
+    return result.data.success;
   }
-  onMount(async() => {
-    if(await isAuth()) {
-      navigate('/smart-home', { replace: true })
-    } else {
-      navigate('/login', {replace: true})
-    }
-  })
+
+  const delayModuleLoad = module =>
+    new Promise(res =>
+      setTimeout(() => res(module), Math.random() * 2000),
+    );
 </script>
 
 <div class="page">
   <Store >
     <Router>
-      <Route path="/login" component={Login} />
-      <Route path="/register" component={Register} />
-      <Route path="/smart-home" component={MainView} />
-      <Route path="*" component={NotFound} />
+      <LazyRoute path="/login" component={Login} delayMs={500}>
+        <h4 class="loader">Loading...</h4>
+      </LazyRoute>
+      <LazyRoute path="/register" component={Register} delayMs={500}>
+        <h4 class="loader">Loading...</h4>
+      </LazyRoute>
+      {#await isAuth()}
+        <h4 class="loader">Loading...</h4>
+      {:then autResult}
+        <AuthMiddleware isAuthenticated={autResult} falseRedirectTo={'/login'} trueRedirectTo={'/smart-home'}>
+          <LazyRoute path="/smart-home" component={MainView}>
+            <h4 class="loader">Loading...</h4>
+          </LazyRoute>
+          <LazyRoute path="*" component={NotFound} />
+        </AuthMiddleware>
+      {/await}
     </Router>
   </Store>
 </div>
@@ -40,5 +52,15 @@
     width: 100%;
     margin: auto;
     position: relative;
+
+    .loader {
+      font-size: 34px;
+      color: #eee;
+      margin: 0;
+      transform: translate(-50%, -50%);
+      top: 50%;
+      left: 50%;
+      position: absolute;
+    }
   }
 </style>
