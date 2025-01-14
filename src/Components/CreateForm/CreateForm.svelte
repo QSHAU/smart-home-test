@@ -10,6 +10,11 @@
         nameDevice,
         typeDevice;
 
+    const formName = {
+        createRoom: 'Room create',
+        createDevice: 'Device create',
+    }
+
     const choosedDevice = (type) => {
         typeDevice = type;
     }
@@ -69,7 +74,7 @@
      transition:fade
      on:outroend={() => ($checkForm = false)}>
     <h3 class="createForm__title">
-        {$checkForm === 'createRoom' ? 'Room create' : 'Device create'}
+        {formName[$checkForm]}
     </h3>
     <form class="createForm-form" on:submit={(e) => createForm(e)}>
         {#if $checkForm === 'createRoom'}

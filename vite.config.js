@@ -15,6 +15,7 @@ export default defineConfig({
   resolve: {
 		dedupe: ["svelte"],
 		alias: {
+			"@src": path.resolve(__dirname, "src"),
 			"@Data": path.resolve(__dirname, "src/Data/"),
 		},
 	},

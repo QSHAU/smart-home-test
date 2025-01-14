@@ -33,10 +33,10 @@
       {#await isAuth()}
         <h4 class="loader">Loading...</h4>
       {:then autResult}
-        <AuthMiddleware isAuthenticated={autResult} falseRedirectTo={'/login'} trueRedirectTo={'/smart-home'}>
-          <LazyRoute path="/smart-home" component={MainView}>
-            <h4 class="loader">Loading...</h4>
-          </LazyRoute>
+        <AuthMiddleware isAuthenticated={autResult} falseRedirectTo={'/login'}>
+            <LazyRoute path="/smart-home" component={MainView}>
+              <h4 class="loader">Loading...</h4>
+            </LazyRoute>
           <LazyRoute path="*" component={NotFound} />
         </AuthMiddleware>
       {/await}
@@ -48,7 +48,6 @@
   .page {
     flex-grow: 1;
     background-color: #282424;
-    // max-width: 375px;
     width: 100%;
     margin: auto;
     position: relative;
